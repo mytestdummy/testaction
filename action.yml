@@ -9,13 +9,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: touch ${{ inputs.who-to-greet }}
+    - run: 
+        touch ${{ inputs.who-to-greet }}
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~4)" | Test: Earlier Commits Cleaned"
       shell: bash
     - run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .
-        git commit -am "Repository History Cleaned | Monthly"
+        git commit -am $COMMIT_MESSAGE
         git push
       shell: bash
 
