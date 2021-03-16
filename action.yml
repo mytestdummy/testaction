@@ -9,7 +9,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: mkdir ${{ inputs.who-to-greet }}
+    - run: touch ${{ inputs.who-to-greet }}
       shell: bash
     - run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
