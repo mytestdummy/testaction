@@ -1,0 +1,23 @@
+name: 'Testaction'
+author: 'Sitdisch'
+description: 'Test your action'
+inputs:
+  who-to-greet: # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+runs:
+  using: "composite"
+  steps:
+    # - uses: actions/checkout@master
+    - run: echo Hello ${{ inputs.who-to-greet }}.
+      shell: bash
+    # - run: ${{ github.action_path }}/goodbye.sh
+    #   shell: bash
+    # - run: |
+    #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    #     git config --local user.name "github-actions[bot]"
+    #     git add .
+    #     git commit -am "Repository History Cleaned | Monthly"
+    #   shell: bash
+    # - uses: ad-m/github-push-action@master
