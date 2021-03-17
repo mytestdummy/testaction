@@ -2,16 +2,15 @@ name: 'Testaction'
 author: 'Sitdisch'
 description: 'Test your action'
 inputs:
-  who-to-greet: # id of input
-    description: 'test'
+  n-remaining-commits:
+    description: 'number of remaining commits'
     required: true
-    default: 'World'
 runs:
   using: "composite"
   steps:
     - run: |
-        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~4)" [ Test[bot]: Earlier Commits Cleaned ]"
-        touch ${{ inputs.who-to-greet }}
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.n-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
+        touch Moon
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .
