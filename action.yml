@@ -11,8 +11,8 @@ runs:
   steps:
     - run: 
         touch ${{ inputs.who-to-greet }}
-        COMMIT_MESSAGE="$(git log --format=%B -n 1 HEAD~4)"
-        echo "$COMMIT_MESSAGE"
+        COMMIT_MESSAGE='$(git log --format=%B -n 1 HEAD~4)'
+        echo '$COMMIT_MESSAGE'
         echo "test"
         # git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         # git config --local user.name "github-actions[bot]"
