@@ -2,8 +2,8 @@ name: 'Testaction'
 author: 'Sitdisch'
 description: 'Test your action'
 inputs:
-  N-remaining-commits:
-    description: '{N}umber of most recent commits remaining'
+  n-remaining-commits:
+    description: 'Number of most recent commits remaining'
     required: true
 runs:
   using: "composite"
@@ -11,11 +11,11 @@ runs:
     - run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        NTH_COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.N-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
+        NTH_COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.n-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
         
-        git checkout --orphan test_temp HEAD~${{ inputs.N-remaining-commits }}
+        git checkout --orphan test_temp HEAD~${{ inputs.n-remaining-commits }}
         git commit -m "$NTH_COMMIT_MESSAGE"
-        git rebase --onto test_temp master~${{ inputs.N-remaining-commits }} master
+        git rebase --onto test_temp master~${{ inputs.n-remaining-commits }} master
         git branch -D test_temp
         git push origin HEAD --force
       shell: bash
