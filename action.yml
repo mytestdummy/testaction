@@ -9,22 +9,13 @@ runs:
   using: "composite"
   steps:
     - run: |
-        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.N-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
-        touch Moon
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add .
-        git commit -am "$COMMIT_MESSAGE"
-        git push
+        NTH_COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.N-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
+        
+        git checkout --orphan test_temp HEAD~${{ inputs.N-remaining-commits }}
+        git commit -m "$NTH_COMMIT_MESSAGE"
+        git rebase --onto test_temp master~${{ inputs.N-remaining-commits }} master
+        git branch -D test_temp
+        git push origin HEAD --force
       shell: bash
-
-# RESIDUUM
-    # - run: ${{ github.action_path }}/goodbye.sh
-    #   shell: bash
-    # - run: |
-    #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    #     git config --local user.name "github-actions[bot]"
-    #     git add .
-    #     git commit -am "Repository History Cleaned | Monthly"
-    #   shell: bash
-    # - uses: ad-m/github-push-action@master
