@@ -16,7 +16,7 @@ runs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .
-        git commit -am $(git log --format=%B -n 1 HEAD~4)
+        git commit -am "$(git log --format=%B -n 1 HEAD~4)"
         git push
       shell: bash
 
