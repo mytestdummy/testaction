@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - run: |
-        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~4)" | Test: Earlier Commits Cleaned"
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~4)" [ Test[bot]: Earlier Commits Cleaned ]"
         touch ${{ inputs.who-to-greet }}
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
