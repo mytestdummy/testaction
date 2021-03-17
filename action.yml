@@ -3,7 +3,7 @@ author: 'Sitdisch'
 description: 'Test your action'
 inputs:
   N-remaining-commits:
-    description: 'number of remaining commits'
+    description: '{N}umber of most recent commits remaining'
     required: true
 runs:
   using: "composite"
