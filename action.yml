@@ -2,8 +2,11 @@ name: 'Testaction'
 author: 'Sitdisch'
 description: 'Test your action'
 inputs:
-  n-remaining-commits:
-    description: 'Number of most recent commits remaining'
+  new-first-commit:
+    description: 'New first commit (e.g. 6c7d988, HEAD~15 etc.)'
+    required: true
+  branch:
+    description: 'Branch to be pruned'
     required: true
 runs:
   using: "composite"
@@ -11,11 +14,11 @@ runs:
     - run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        COMMIT_MESSAGE=$(git log --format=%B -n 1 HEAD~${{ inputs.n-remaining-commits }})" [ Test[bot]: Earlier Commits Cleaned ]"
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ inputs.new-first-commit }})" [ Test[bot]: Earlier Commits Cleaned ]"
         
-        git checkout --orphan test_temp HEAD~${{ inputs.n-remaining-commits }}
+        git checkout --orphan test_temp ${{ inputs.new-first-commit }}
         git commit -m "$COMMIT_MESSAGE"
-        git rebase --onto test_temp master~${{ inputs.n-remaining-commits }} master
+        git rebase --onto test_temp ${{ inputs.new-first-commit }} ${{ github.event.inputs.branch }}
         git branch -D test_temp
         git push origin HEAD --force
       shell: bash
