@@ -3,7 +3,7 @@ author: 'Sitdisch'
 description: 'Test your action'
 inputs:
   new-first-commit:
-    description: 'New first commit (commit-hash | HEAD~N etc.)'
+    description: 'New first commit'
     required: true
   branch:
     description: 'Branch to be pruned'
