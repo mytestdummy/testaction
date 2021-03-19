@@ -1,6 +1,9 @@
 name: 'Testaction'
 author: 'Sitdisch'
 description: 'Test your action'
+defaults:
+  run:
+    shell: bash
 inputs:
   new-first-commit:
     description: 'New first commit'
@@ -23,4 +26,3 @@ runs:
         git rebase --onto test_temp $COMMIT_ID ${{ github.event.inputs.branch }}
         git branch -D test_temp
         git push origin HEAD --force
-      shell: bash
