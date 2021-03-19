@@ -20,7 +20,7 @@ runs:
         
         git checkout --orphan test_temp "$COMMIT_ID"
         git commit -m "$COMMIT_MESSAGE"
-        git rebase --onto test_temp $COMMIT_ID ${{ github.event.inputs.branch }}
+        git rebase --onto test_temp $COMMIT_ID ${{ inputs.branch }}
         git branch -D test_temp
         git push origin HEAD --force
       shell: bash
