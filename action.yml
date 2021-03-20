@@ -10,7 +10,7 @@ inputs:
     required: true
     default: 'master'
   user-name:
-    description: 'User who commits'
+    description: 'User who should commit'
     required: true
     default: 'github-actions[bot]'
   user-email:
