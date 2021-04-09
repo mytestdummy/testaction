@@ -29,7 +29,7 @@ runs:
   steps:
     - name: Create Mobile Results
       run: |
-        mkdir ${{ inputs.path }}
+        mkdir -p ${{ inputs.path }}
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
         ./src/index.js -u https://mythemeway.github.io -b pagespeed -o mobile
