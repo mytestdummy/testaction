@@ -1,26 +1,19 @@
-# Branch-Pruner | GitHub Action
+# Lighthouse-Keeper | GitHub Action
 # 
-# Description: Truncates a branch's commit history
+# Description: Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(S) to a selected target repository
 # Author: Sitdisch
-# Source: https://github.com/myactionway/branch-pruner-action
+# Source: https://github.com/myactionway/lighthouse-keeper-action
+# License: MIT
 # Copyright (c) 2021 Sitdisch
-# 
-# CAUTION: BE CAREFUL, IT'S A POWERFUL TOOL AND YOU DO THIS AT YOUR OWN RISK.
 
-name: 'Branch-Pruner'
+name: 'Lighthouse-Keeper'
 author: 'Sitdisch'
-description: "Truncates a branch's commit history"
+description: "Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(S) to a selected repository"
 branding:
-  icon: scissors
-  color: red
+  icon: search
+  color: yellow
 
 inputs:
-  new-first-commit:
-    description: 'New first commit'
-    required: true
-  branch:
-    description: 'Branch to be pruned'
-    required: true
   user-name:
     description: 'User who should commit'
     required: true
@@ -31,14 +24,20 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: Create Results
+      run: |
+        mkdir lighthouse_badges_results
+        cd temp_lighthouse_badges_nested
+        export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
+        ./src/index.js -u https://mythemeway.github.io -b pagespeed -o mobile
+        cp -r mobile ../lighthouse_badges_results
+        cd ..
+      shell: bash
+    - name: Commit Results
+      run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        COMMIT_ID=$(git rev-parse ${{ inputs.new-first-commit }})
-        COMMIT_MESSAGE=$(git log --format=%B -n 1 "$COMMIT_ID" )" [ Branch-Pruner[bot]: Earlier Commits Truncated ]"
-        git checkout --orphan pruner_temp_branch "$COMMIT_ID"
-        git commit -m "$COMMIT_MESSAGE"
-        git rebase --onto pruner_temp_branch $COMMIT_ID ${{ inputs.branch }}
-        git branch -D pruner_temp_branch
-        git push origin HEAD --force
+        git add lighthouse_badges_results
+        git commit -am "| Lighthouse Results Added"
+        git push
       shell: bash
