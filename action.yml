@@ -14,6 +14,9 @@ branding:
   color: yellow
 
 inputs:
+  directory:
+    description: 'Target directory'
+    required: true
   user-name:
     description: 'User who should commit'
     required: true
@@ -24,20 +27,20 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create Results
+    - name: Create Mobile Results
       run: |
-        mkdir lighthouse_badges_results
+        mkdir ${{ inputs.directory }}
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
         ./src/index.js -u https://mythemeway.github.io -b pagespeed -o mobile
-        cp -r mobile ../lighthouse_badges_results
+        cp -r mobile ../${{ inputs.directory }}
         cd ..
       shell: bash
     - name: Commit Results
       run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        git add lighthouse_badges_results
+        git add ${{ inputs.directory }}
         git commit -am "| Lighthouse Results Added"
         git push
       shell: bash
