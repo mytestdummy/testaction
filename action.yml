@@ -14,6 +14,9 @@ branding:
   color: yellow
 
 inputs:
+  badge-style:
+    description: 'flat,flat-square,plastic,for-the-badge,social'
+    required: true
   urls:
     description: 'URL(s) to be checked'
     required: true
@@ -35,7 +38,7 @@ runs:
         mkdir -p ${{ inputs.path }}
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
-        ./src/index.js -u ${{ inputs.urls }} -b pagespeed -o mobile
+        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r mobile ../${{ inputs.path }}
         cd ..
       shell: bash
