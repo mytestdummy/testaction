@@ -14,8 +14,8 @@ branding:
   color: yellow
 
 inputs:
-  directory:
-    description: 'Target directory'
+  path:
+    description: 'Path to place the results'
     required: true
   user-name:
     description: 'User who should commit'
@@ -29,18 +29,18 @@ runs:
   steps:
     - name: Create Mobile Results
       run: |
-        mkdir ${{ inputs.directory }}
+        mkdir ${{ inputs.path }}
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
         ./src/index.js -u https://mythemeway.github.io -b pagespeed -o mobile
-        cp -r mobile ../${{ inputs.directory }}
+        cp -r mobile ../${{ inputs.path }}
         cd ..
       shell: bash
     - name: Commit Results
       run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        git add ${{ inputs.directory }}
+        git add ${{ inputs.path }}
         git commit -am "| Lighthouse Results Added"
         git push
       shell: bash
