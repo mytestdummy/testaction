@@ -15,7 +15,7 @@ branding:
 
 inputs:
   badge-style:
-    description: 'Badge Styles: pagespeed, flat,flat-square,plastic,for-the-badge or social'
+    description: 'Badge Style: e.g flat,plastic,social...'
     required: true
   urls:
     description: 'URL(s) to be checked'
