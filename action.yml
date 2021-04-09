@@ -43,6 +43,7 @@ runs:
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r mobile ../${{ inputs.path }}
+      shell: bash
     - name: Create Desktop Results
       run: |
         export LIGHTHOUSE_BADGES_PARAMS="--preset=desktop --throttling.cpuSlowdownMultiplier=1"
