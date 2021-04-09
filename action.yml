@@ -33,26 +33,27 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Change Directory
-      run: |
-        mkdir -p ${{ inputs.path }}
-        cd temp_lighthouse_badges_nested
+    - name: Make Directory
+      run: mkdir -p ${{ inputs.path }}
       shell: bash
     - name: Create Mobile Results
       run: |
+        cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r mobile ../${{ inputs.path }}
+        cd ..
       shell: bash
     - name: Create Desktop Results
       run: |
+        cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--preset=desktop --throttling.cpuSlowdownMultiplier=1"
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r desktop ../${{ inputs.path }}
+        cd ..
       shell: bash
     - name: Commit Results
       run: |
-        cd ..
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
         git add ${{ inputs.path }}
