@@ -48,7 +48,7 @@ runs:
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="--preset=desktop --throttling.cpuSlowdownMultiplier=1"
-        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
+        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o desktop
         cp -r desktop ../${{ inputs.path }}
         cd ..
       shell: bash
