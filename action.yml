@@ -20,17 +20,14 @@ inputs:
   path:
     description: 'Path to place the results'
     required: true
-  badge-style:
-    description: 'Badge Style: flat,plastic,social...'
-    required: true
-  single-badge:
-    description: 'Output only a single-badge'
+  badge-args:
+    description: 'Badge arguments: -b {flat,...}, -r, -s'
     required: true
   mobile-lighthouse-params:
-    description: 'Additional Parameters mobile assessment'
+    description: 'Lighthouse parameters mobile assessment'
     required: true
   desktop-lighthouse-params:
-    description: 'Additional Parameters desktop assessment'
+    description: 'Lighthouse parameters desktop assessment'
     required: true
   user-name:
     description: 'User who should commit'
@@ -45,19 +42,11 @@ runs:
     - name: Make Directory
       run: mkdir -p ${{ inputs.path }}
       shell: bash
-    - name: Set Optional Arguments
-      run: |
-        if [ ${{ inputs.single.badge }} = "true" ]; then
-          SINGLE_BADGE="-s"
-        else
-          SINGLE_BADGE=""
-        fi
-      shell: bash
     - name: Create Mobile Results
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE_BADGE -o mobile -r
+        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o mobile
         cp -r mobile ../${{ inputs.path }}
         cd ..
       shell: bash
@@ -65,7 +54,7 @@ runs:
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE_BADGE -o desktop -r
+        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o desktop
         cp -r desktop ../${{ inputs.path }}
         cd ..
       shell: bash
