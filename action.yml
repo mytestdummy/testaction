@@ -21,7 +21,7 @@ inputs:
     description: 'Path to place the results'
     required: true
   badges-args:
-    description: 'Badges arguments: -b {flat,...}, -r, -s'
+    description: 'Badges arguments: -b {flat...}, -r, -s'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile'
