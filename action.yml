@@ -23,6 +23,12 @@ inputs:
   badge-style:
     description: 'Badge Style: flat,plastic...'
     required: true
+  mobile-lighthouse-params:
+    description: 'Additional parameters for mobile assessment'
+    required: true
+  desktop-lighthouse-params:
+    description: 'Additional parameters for desktop assessment'
+    required: true
   user-name:
     description: 'User who should commit'
     required: true
@@ -39,7 +45,7 @@ runs:
     - name: Create Mobile Results
       run: |
         cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS="--throttling.cpuSlowdownMultiplier=2"
+        export LIGHTHOUSE_BADGES_PARAMS=${{ inputs.mobile-lighthouse-params }}
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r mobile ../${{ inputs.path }}
         cd ..
@@ -47,7 +53,7 @@ runs:
     - name: Create Desktop Results
       run: |
         cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS="--preset=desktop --throttling.cpuSlowdownMultiplier=1"
+        export LIGHTHOUSE_BADGES_PARAMS=${{ inputs.desktop-lighthouse-params }}
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o desktop
         cp -r desktop ../${{ inputs.path }}
         cd ..
