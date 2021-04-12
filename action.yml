@@ -25,7 +25,6 @@ inputs:
     required: true
   single-badge:
     description: 'Output only a single-badge'
-    required: true
   mobile-lighthouse-params:
     description: 'Additional Parameters for mobile assessment'
     required: true
@@ -48,16 +47,16 @@ runs:
     - name: Set Optional Arguments
       run: |
         if [ ${{ inputs.single.badge }} ]; then
-          SINGLE-BADGE="-s"
+          SINGLE_BADGE="-s"
         else
-          SINGLE-BADGE=""
+          SINGLE_BADGE=""
         fi
       shell: bash
     - name: Create Mobile Results
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE-BADGE -o mobile -r
+        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE_BADGE -o mobile -r
         cp -r mobile ../${{ inputs.path }}
         cd ..
       shell: bash
@@ -65,7 +64,7 @@ runs:
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE-BADGE -o desktop -r
+        ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} $SINGLE_BADGE -o desktop -r
         cp -r desktop ../${{ inputs.path }}
         cd ..
       shell: bash
