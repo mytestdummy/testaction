@@ -24,10 +24,10 @@ inputs:
     description: 'Badge Style: flat,plastic...'
     required: true
   mobile-lighthouse-params:
-    description: 'Additional parameters for mobile assessment'
+    description: 'Parameters for mobile assessment'
     required: true
   desktop-lighthouse-params:
-    description: 'Additional parameters for desktop assessment'
+    description: 'Parameters for desktop assessment'
     required: true
   user-name:
     description: 'User who should commit'
