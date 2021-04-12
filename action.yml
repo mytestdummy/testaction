@@ -45,7 +45,7 @@ runs:
     - name: Create Mobile Results
       run: |
         cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS=${{ inputs.mobile-lighthouse-params }}
+        export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o mobile
         cp -r mobile ../${{ inputs.path }}
         cd ..
@@ -53,7 +53,7 @@ runs:
     - name: Create Desktop Results
       run: |
         cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS=${{ inputs.desktop-lighthouse-params }}
+        export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
         ./src/index.js -u ${{ inputs.urls }} -b ${{ inputs.badge-style }} -o desktop
         cp -r desktop ../${{ inputs.path }}
         cd ..
