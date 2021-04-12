@@ -20,8 +20,8 @@ inputs:
   results-path:
     description: 'Path to place the results'
     required: true
-  badge-args:
-    description: 'Badge arguments: -b {flat,...}, -r, -s'
+  badges-args:
+    description: 'Badges arguments: -b {flat,...}, -r, -s'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile'
@@ -46,7 +46,7 @@ runs:
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o mobile
+        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o mobile
         cp -r mobile ../${{ inputs.results-path }}
         cd ..
       shell: bash
@@ -54,7 +54,7 @@ runs:
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o desktop
+        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o desktop
         cp -r desktop ../${{ inputs.results-path }}
         cd ..
       shell: bash
