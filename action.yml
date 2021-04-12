@@ -25,11 +25,12 @@ inputs:
     required: true
   single-badge:
     description: 'Output only a single-badge'
+    required: true
   mobile-lighthouse-params:
-    description: 'Additional Parameters for mobile assessment'
+    description: 'Additional Parameters mobile assessment'
     required: true
   desktop-lighthouse-params:
-    description: 'Additional Parameters for desktop assessment'
+    description: 'Additional Parameters desktop assessment'
     required: true
   user-name:
     description: 'User who should commit'
@@ -46,7 +47,7 @@ runs:
       shell: bash
     - name: Set Optional Arguments
       run: |
-        if [ ${{ inputs.single.badge }} ]; then
+        if [ ${{ inputs.single.badge }} = "true" ]; then
           SINGLE_BADGE="-s"
         else
           SINGLE_BADGE=""
