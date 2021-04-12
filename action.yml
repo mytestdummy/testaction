@@ -17,7 +17,7 @@ inputs:
   urls:
     description: 'URL(s) to be checked'
     required: true
-  path:
+  results-path:
     description: 'Path to place the results'
     required: true
   badge-args:
@@ -40,14 +40,14 @@ runs:
   using: "composite"
   steps:
     - name: Make Directory
-      run: mkdir -p ${{ inputs.path }}
+      run: mkdir -p ${{ inputs.results-path }}
       shell: bash
     - name: Create Mobile Results
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
         ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o mobile
-        cp -r mobile ../${{ inputs.path }}
+        cp -r mobile ../${{ inputs.results-path }}
         cd ..
       shell: bash
     - name: Create Desktop Results
@@ -55,14 +55,14 @@ runs:
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
         ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badge-args }} -o desktop
-        cp -r desktop ../${{ inputs.path }}
+        cp -r desktop ../${{ inputs.results-path }}
         cd ..
       shell: bash
     - name: Commit Results
       run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        git add ${{ inputs.path }}
+        git add ${{ inputs.results-path }}
         git commit -am "| Lighthouse Results Added"
         git push
       shell: bash
