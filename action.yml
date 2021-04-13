@@ -46,22 +46,24 @@ runs:
       run: mkdir -p ${{ inputs.results-path }}
       shell: bash
     - name: Create Mobile Results
-      if: ${{ inputs.results-type == 'both' || inputs.results-type == 'mobile' }}
       run: |
-        cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o mobile
-        cp -r mobile ../${{ inputs.results-path }}
-        cd ..
+        if [ ${{ inputs.results-type == 'both' || inputs.results-type == 'mobile' }} ]; then
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o mobile
+          cp -r mobile ../${{ inputs.results-path }}
+          cd ..
+        fi
       shell: bash
     - name: Create Desktop Results
-      if: ${{ inputs.results-type == 'both' || inputs.results-type == 'desktop' }}
       run: |
-        cd temp_lighthouse_badges_nested
-        export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o desktop
-        cp -r desktop ../${{ inputs.results-path }}
-        cd ..
+        if [ ${{ inputs.results-type == 'both' || inputs.results-type == 'desktop' }} ]; then
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} ${{ inputs.badges-args }} -o desktop
+          cp -r desktop ../${{ inputs.results-path }}
+          cd ..
+        fi
       shell: bash
     - name: Commit Results
       run: |
