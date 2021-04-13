@@ -23,6 +23,9 @@ inputs:
   badges-args:
     description: 'Badges arguments: -b {flat...}, -r, -s'
     required: true
+  results-type:
+    description: 'Results type: mobile, desktop, both'
+    required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile'
     required: true
@@ -43,6 +46,7 @@ runs:
       run: mkdir -p ${{ inputs.results-path }}
       shell: bash
     - name: Create Mobile Results
+      if: ${{ inputs.results-type == 'both' || inputs.results-type == 'mobile' }}
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
@@ -51,6 +55,7 @@ runs:
         cd ..
       shell: bash
     - name: Create Desktop Results
+      if: ${{ inputs.results-type == 'both' || inputs.results-type == 'desktop' }}
       run: |
         cd temp_lighthouse_badges_nested
         export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
@@ -63,6 +68,6 @@ runs:
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
         git add ${{ inputs.results-path }}
-        git commit -am "| Lighthouse Results Added"
+        git commit -am "Lighthouse-Keeper[bot]: Results Added"
         git push
       shell: bash
