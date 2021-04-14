@@ -1,6 +1,6 @@
 # Lighthouse-Keeper | GitHub Action
 # 
-# Description: Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(S) to a selected target repository
+# Description: Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(s) to a selected target repository
 # Author: Sitdisch
 # Source: https://github.com/myactionway/lighthouse-keeper-action
 # License: MIT
@@ -8,7 +8,7 @@
 
 name: 'Lighthouse-Keeper'
 author: 'Sitdisch'
-description: "Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(S) to a selected repository"
+description: "Generates & adds manually/automatically Lighthouse badges & reports from one/multiple input URL(s) to a selected repository"
 branding:
   icon: search
   color: yellow
@@ -24,7 +24,7 @@ inputs:
     description: 'Badges arguments: -b {flat...}, -r, -s'
     required: true
   results-type:
-    description: 'Results type: mobile, desktop, both'
+    description: 'Results type: mobile, desktop or both'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile'
