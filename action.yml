@@ -38,6 +38,9 @@ inputs:
   user-email:
     description: 'User e-mail address'
     required: true
+  commit-message:
+    description: 'Commit message'
+    required: true
 
 runs:
   using: "composite"
@@ -70,6 +73,6 @@ runs:
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
         git add ${{ inputs.results-path }}
-        git commit -am "Lighthouse-Keeper[bot]: Results Added"
+        git commit -am ${{ inputs.commit-message }}
         git push
       shell: bash
