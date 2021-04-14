@@ -27,10 +27,10 @@ inputs:
     description: 'Results type: mobile, desktop or both'
     required: true
   mobile-lighthouse-params:
-    description: 'Lighthouse parameters mobile'
+    description: 'Lighthouse parameters mobile audit'
     required: true
   desktop-lighthouse-params:
-    description: 'Lighthouse parameters desktop'
+    description: 'Lighthouse parameters desktop audit'
     required: true
   user-name:
     description: 'User who should commit'
