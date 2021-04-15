@@ -44,36 +44,35 @@ runs:
   steps:
     - name: Preparatory Tasks
       run: |
-        # INPUT_BADGES_ARGS="${{ inputs.badges-args }}"
         RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
         BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
-        # mkdir -p $RESULTS-PATH
+        mkdir -p $RESULTS-PATH
       shell: bash
-    # - name: Create Mobile Results
-      # run: |
-        # if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
-        #   cd temp_lighthouse_badges_nested
-        #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        #   ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
-        #   cp -r mobile ../$RESULTS-PATH
-        #   cd ..
-        # fi
-      # shell: bash
-    # - name: Create Desktop Results
-      # run: |
-        # if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
-        #   cd temp_lighthouse_badges_nested
-        #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        #   ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
-        #   cp -r desktop ../$RESULTS-PATH
-        #   cd ..
-        # fi
-      # shell: bash
-    # - name: Commit Results
-      # run: |
-        # git config --local user.email ${{ inputs.user-email }}
-        # git config --local user.name ${{ inputs.user-name }}
-        # git add $RESULTS-PATH
-        # git commit -am ${{ inputs.commit-message }}
-        # git push
-      # shell: bash
+    - name: Create Mobile Results
+      run: |
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
+          cp -r mobile ../$RESULTS-PATH
+          cd ..
+        fi
+      shell: bash
+    - name: Create Desktop Results
+      run: |
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
+          cp -r desktop ../$RESULTS-PATH
+          cd ..
+        fi
+      shell: bash
+    - name: Commit Results
+      run: |
+        git config --local user.email ${{ inputs.user-email }}
+        git config --local user.name ${{ inputs.user-name }}
+        git add $RESULTS-PATH
+        git commit -am ${{ inputs.commit-message }}
+        git push
+      shell: bash
