@@ -45,7 +45,7 @@ runs:
     - name: Preparatory Tasks
       run: |
         INPUT_BADGES_ARGS="${{ inputs.badges-args }}"
-        RESULTS_PATH=`expr "$INPUT_BADGES_ARGS" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\) .*'`
+        RESULTS_PATH=$(expr "$INPUT_BADGES_ARGS" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\) .*')
         BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< $INPUT_BADGES_ARGS )
         # mkdir -p $RESULTS-PATH
       shell: bash
