@@ -54,7 +54,7 @@ runs:
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
-          cp -r mobile ../$RESULTS-PATH
+          cp -r mobile ../$RESULTS_PATH
           cd ..
         fi
       shell: bash
@@ -64,7 +64,7 @@ runs:
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
-          cp -r desktop ../$RESULTS-PATH
+          cp -r desktop ../$RESULTS_PATH
           cd ..
         fi
       shell: bash
@@ -72,7 +72,7 @@ runs:
       run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        git add $RESULTS-PATH
+        git add $RESULTS_PATH
         git commit -am ${{ inputs.commit-message }}
         git push
       shell: bash
