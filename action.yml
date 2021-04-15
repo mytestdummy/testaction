@@ -44,7 +44,7 @@ runs:
   steps:
     - name: Preparatory Tasks
       run: |
-        INPUT_BADGES_ARGS=${{ inputs.badges-args }}
+        INPUT_BADGES_ARGS="${{ inputs.badges-args }}"
         # RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\) .*'`
         # BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< $INPUT_BADGES_ARGS )
         echo $INPUT_BADGES_ARGS
