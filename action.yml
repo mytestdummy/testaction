@@ -73,6 +73,6 @@ runs:
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
         git add $RESULTS_PATH
-        git commit -am ${{ inputs.commit-message }}
+        git commit -am "${{ inputs.commit-message }}"
         git push
       shell: bash
