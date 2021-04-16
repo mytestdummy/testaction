@@ -53,7 +53,7 @@ runs:
       run: |
           source ~/lighthouse_keeper_env.txt
           echo $BADGES_ARGS
-          echo ${{ inputs.badges-args }}
+          echo ${{ env.BADGES-ARGS }}
       shell: bash
     #     source ~/lighthouse_keeper_env.txt
     #     if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
