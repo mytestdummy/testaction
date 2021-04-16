@@ -51,6 +51,7 @@ runs:
       shell: bash
     - name: Create Mobile Results
       run: |
+          echo ${{ env.BADGES-ARGS }}
           source ~/lighthouse_keeper_env.txt
           echo $BADGES_ARGS
           echo ${{ env.BADGES-ARGS }}
