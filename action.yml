@@ -51,7 +51,7 @@ runs:
       shell: bash
     - name: Create Mobile Results
       run: |
-        if [ ${{ inputs.results-type }} =~ \(both\)\|\(mobile\) ]; then
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
           source ~/lighthouse_keeper_env.txt
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
@@ -62,7 +62,7 @@ runs:
       shell: bash
     - name: Create Desktop Results
       run: |
-        if [ ${{ inputs.results-type }} =~ \(both\)\|\(desktop\) ]; then
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
           source ~/lighthouse_keeper_env.txt
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
