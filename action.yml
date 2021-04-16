@@ -44,9 +44,8 @@ runs:
   steps:
     - name: Preparatory Tasks
       run: |
-        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
-        BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
-        export $RESULTS_PATH $BADGES_ARGS
+        export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
+        export BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
         mkdir -p $RESULTS_PATH
       shell: bash
     - name: Create Mobile Results
