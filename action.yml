@@ -44,41 +44,43 @@ runs:
   steps:
     - name: Preparatory Tasks
       run: |
-        echo 'export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> ~/test.txt
-        source ~/test.txt
-        # export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
-        # export BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
+        echo 'export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> ~/lighthouse_keeper_env.txt
+        echo 'export BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )' >> ~/lighthouse_keeper_env.txt
+        source ~/lighthouse_keeper_env.txt
         mkdir -p $RESULTS_PATH
       shell: bash
     - name: Create Mobile Results
       run: |
-        source ~/test.txt
-        echo $RESULTS_PATH
-        echo $BADGES_ARGS
+          source ~/lighthouse_keeper_env.txt
+          echo $BADGES_ARGS
+          echo ${{ inputs.badges-args }}
       shell: bash
-        # if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
-        #   cd temp_lighthouse_badges_nested
-        #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-        #   ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
-        #   cp -r mobile ../$RESULTS_PATH
-        #   cd ..
-        # fi
-      # shell: bash
+    #     source ~/lighthouse_keeper_env.txt
+    #     if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
+    #       cd temp_lighthouse_badges_nested
+    #       export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+    #       ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
+    #       cp -r mobile ../$RESULTS_PATH
+    #       cd ..
+    #     fi
+    #   shell: bash
     # - name: Create Desktop Results
-      # run: |
-        # if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
-        #   cd temp_lighthouse_badges_nested
-        #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-        #   ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
-        #   cp -r desktop ../$RESULTS_PATH
-        #   cd ..
-        # fi
-      # shell: bash
+    #   run: |
+    #     source ~/lighthouse_keeper_env.txt
+    #     if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
+    #       cd temp_lighthouse_badges_nested
+    #       export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+    #       ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
+    #       cp -r desktop ../$RESULTS_PATH
+    #       cd ..
+    #     fi
+    #   shell: bash
     # - name: Commit Results
-      # run: |
-        # git config --local user.email ${{ inputs.user-email }}
-        # git config --local user.name ${{ inputs.user-name }}
-        # git add $RESULTS_PATH
-        # git commit -am "${{ inputs.commit-message }}"
-        # git push
-      # shell: bash
+    #   run: |
+    #     source ~/lighthouse_keeper_env.txt
+    #     git config --local user.email ${{ inputs.user-email }}
+    #     git config --local user.name ${{ inputs.user-name }}
+    #     git add $RESULTS_PATH
+    #     git commit -am "${{ inputs.commit-message }}"
+    #     git push
+    #   shell: bash
