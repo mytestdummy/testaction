@@ -52,7 +52,7 @@ runs:
       shell: bash
     - name: Create Mobile Results
       run: |
-        source ~/.bashrc
+        source ~/test.txt
         echo $RESULTS_PATH
         echo $BADGES_ARGS
       shell: bash
