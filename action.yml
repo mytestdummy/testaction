@@ -46,14 +46,13 @@ runs:
       run: |
         echo 'export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> ~/lighthouse_keeper_env.txt
         echo 'export BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" )' >> ~/lighthouse_keeper_env.txt
-        echo 'export RESULTS_TYPE=${{ inputs.results-type }}' >> ~/lighthouse_keeper_env.txt
         source ~/lighthouse_keeper_env.txt
         mkdir -p $RESULTS_PATH
       shell: bash
     - name: Create Mobile Results
       run: |
-        source ~/lighthouse_keeper_env.txt
-        if [[ $RESULTS_TYPE =~ \(both\)\|\(mobile\) ]]; then
+        if [ ${{ inputs.results-type }} =~ \(both\)\|\(mobile\) ]; then
+          source ~/lighthouse_keeper_env.txt
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
@@ -63,8 +62,8 @@ runs:
       shell: bash
     - name: Create Desktop Results
       run: |
-        source ~/lighthouse_keeper_env.txt
-        if [[ $RESULTS_TYPE =~ \(both\)\|\(desktop\) ]]; then
+        if [ ${{ inputs.results-type }} =~ \(both\)\|\(desktop\) ]; then
+          source ~/lighthouse_keeper_env.txt
           cd temp_lighthouse_badges_nested
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
