@@ -52,6 +52,7 @@ runs:
       run: |
         echo $RESULTS_PATH
         echo $BADGES_ARGS
+      shell: bash
         # if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
         #   cd temp_lighthouse_badges_nested
         #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
