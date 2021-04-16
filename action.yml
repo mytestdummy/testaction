@@ -46,6 +46,7 @@ runs:
       run: |
         RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
         BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
+        export $RESULTS_PATH $BADGES_ARGS
         mkdir -p $RESULTS_PATH
       shell: bash
     - name: Create Mobile Results
