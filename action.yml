@@ -44,15 +44,15 @@ runs:
   steps:
     - name: Preparatory Tasks
       run: |
-        echo 'export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> ~/.bashrc
-        
+        echo 'export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> ~/test.txt
+        source ~/test.txt
+        # export RESULTS_PATH=`expr "${{ inputs.badges-args }}" : '.* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*'`
         # export BADGES_ARGS=$(sed -e 's/ \(\(--output-path\)\|\(-o\)\) \S*//g' <<< "${{ inputs.badges-args }}" )
-        source ~/.bashrc
-        # mkdir -p $RESULTS_PATH
+        mkdir -p $RESULTS_PATH
       shell: bash
     - name: Create Mobile Results
       run: |
-        # source ~/.bashrc
+        source ~/.bashrc
         echo $RESULTS_PATH
         echo $BADGES_ARGS
       shell: bash
