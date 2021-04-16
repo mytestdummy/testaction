@@ -51,37 +51,32 @@ runs:
       shell: bash
     - name: Create Mobile Results
       run: |
-          echo ${{ env.BADGES-ARGS }}
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
           source ~/lighthouse_keeper_env.txt
-          echo $BADGES_ARGS
-          echo ${{ env.BADGES-ARGS }}
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
+          cp -r mobile ../$RESULTS_PATH
+          cd ..
+        fi
       shell: bash
-    #     source ~/lighthouse_keeper_env.txt
-    #     if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "mobile" ]; then
-    #       cd temp_lighthouse_badges_nested
-    #       export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-    #       ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
-    #       cp -r mobile ../$RESULTS_PATH
-    #       cd ..
-    #     fi
-    #   shell: bash
-    # - name: Create Desktop Results
-    #   run: |
-    #     source ~/lighthouse_keeper_env.txt
-    #     if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
-    #       cd temp_lighthouse_badges_nested
-    #       export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-    #       ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
-    #       cp -r desktop ../$RESULTS_PATH
-    #       cd ..
-    #     fi
-    #   shell: bash
-    # - name: Commit Results
-    #   run: |
-    #     source ~/lighthouse_keeper_env.txt
-    #     git config --local user.email ${{ inputs.user-email }}
-    #     git config --local user.name ${{ inputs.user-name }}
-    #     git add $RESULTS_PATH
-    #     git commit -am "${{ inputs.commit-message }}"
-    #     git push
-    #   shell: bash
+    - name: Create Desktop Results
+      run: |
+        if [ ${{ inputs.results-type }} = "both" ] || [ ${{ inputs.results-type }} = "desktop" ]; then
+          source ~/lighthouse_keeper_env.txt
+          cd temp_lighthouse_badges_nested
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
+          cp -r desktop ../$RESULTS_PATH
+          cd ..
+        fi
+      shell: bash
+    - name: Commit Results
+      run: |
+        source ~/lighthouse_keeper_env.txt
+        git config --local user.email ${{ inputs.user-email }}
+        git config --local user.name ${{ inputs.user-name }}
+        git add $RESULTS_PATH
+        git commit -am "${{ inputs.commit-message }}"
+        git push
+      shell: bash
