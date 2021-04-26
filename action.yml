@@ -81,5 +81,5 @@ runs:
         git push
         echo $RESULTS_PATH
         echo $BADGES_ARGS
-        rm lighthouse_badger_env.txt
+        rm ~/lighthouse_badger_env.txt
       shell: bash
