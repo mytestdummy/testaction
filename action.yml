@@ -79,5 +79,7 @@ runs:
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
         git push
-        rm -R $RESULTS_PATH
+        echo $RESULTS_PATH
+        echo $BADGES_ARGS
+        rm lighthouse_badger_env.txt
       shell: bash
