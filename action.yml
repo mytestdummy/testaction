@@ -57,6 +57,7 @@ runs:
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
           cp -r mobile ../$RESULTS_PATH
+          rm -R mobile
           cd ..
         fi
       shell: bash
@@ -68,6 +69,7 @@ runs:
           export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
           cp -r desktop ../$RESULTS_PATH
+          rm -R desktop
           cd ..
         fi
       shell: bash
@@ -79,7 +81,4 @@ runs:
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
         git push
-        echo $RESULTS_PATH
-        echo $BADGES_ARGS
-        rm ~/lighthouse_badger_env.txt
       shell: bash
