@@ -54,19 +54,32 @@ runs:
         source ~/lighthouse_badger_env.txt
         cd temp_lighthouse_badges_nested
         if [ ${{ inputs.results-type }} = "both" ]; then
-          echo "yes"
+          mobile_results(){
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+            ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile
+            cp -r mobile ../$RESULTS_PATH
+            rm -R mobile
+          }
+          desktop_results(){
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+            ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop
+            cp -r desktop ../$RESULTS_PATH
+            rm -R desktop
+          }
+          mobile_results &
+          desktop_results &
+          wait
         else
-          # if [ ${{ inputs.results-type }} = "mobile" ]; then
-          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-          # else
-          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-          # fi
-          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.${{ inputs.results-type }}-lighthouse-params }}"
+          if [ ${{ inputs.results-type }} = "mobile" ]; then
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          else
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          fi
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o ${{ inputs.results-type }}
           cp -r ${{ inputs.results-type }} ../$RESULTS_PATH
           rm -R ${{ inputs.results-type }}
-          cd ..
         fi
+        cd ..
       shell: bash
     - name: Commit Results
       run: |
