@@ -56,11 +56,12 @@ runs:
         if [ ${{ inputs.results-type }} = "both" ]; then
           echo "yes"
         else
-          if [ ${{ inputs.results-type }} = "mobile" ]; then
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-          else
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-          fi
+          # if [ ${{ inputs.results-type }} = "mobile" ]; then
+          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          # else
+          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          # fi
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.${{ inputs.results-type }}-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o ${{ inputs.results-type }}
           cp -r ${{ inputs.results-type }} ../$RESULTS_PATH
           rm -R ${{ inputs.results-type }}
