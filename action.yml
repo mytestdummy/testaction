@@ -44,8 +44,9 @@ runs:
   using: "composite"
   steps:
     - run: |
-        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`
-        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" )
+        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"` &
+        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" ) &
+        wait
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         if [ ${{ inputs.results-type }} = "both" ]; then
@@ -63,9 +64,10 @@ runs:
           rm -R ${{ inputs.results-type }}
         fi
         cd ..
-        git config --local user.email ${{ inputs.user-email }}
-        git config --local user.name ${{ inputs.user-name }}
-        git pull
+        git pull &
+        git config --local user.email ${{ inputs.user-email }} &
+        git config --local user.name ${{ inputs.user-name }} &
+        wait
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
         git push
