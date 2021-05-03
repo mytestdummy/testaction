@@ -44,8 +44,8 @@ runs:
   using: "composite"
   steps:
     - run: |
-        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"` &
-        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" ) &
+        { RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"` } &
+        { BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" ) } &
         wait
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
