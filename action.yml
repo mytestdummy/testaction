@@ -43,18 +43,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Preparatory Tasks
-      run: |
-        echo 'RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`' >> $GITHUB_ENV
-        echo 'BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" )' >> $GITHUB_ENV
-      shell: bash
-    - name: Create Results
-      run: |
-        mkdir -p ${{ env.RESULTS_PATH }}
+    - run: |
+        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`
+        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" )
+        mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         if [ ${{ inputs.results-type }} = "both" ]; then
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} ${{ env.BADGES_ARGS }} -o mobile; cp -r mobile ../${{ env.RESULTS_PATH }}; rm -R mobile; } & 
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} ${{ env.BADGES_ARGS }} -o desktop; cp -r desktop ../${{ env.RESULTS_PATH }}; rm -R desktop; } &
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile; cp -r mobile ../$RESULTS_PATH; rm -R mobile; } & 
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop; cp -r desktop ../$RESULTS_PATH; rm -R desktop; } &
           wait
         else
           if [ ${{ inputs.results-type }} = "mobile" ]; then
@@ -62,18 +58,15 @@ runs:
           else
             export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           fi
-          ./src/index.js -u ${{ inputs.urls }} ${{ env.BADGES_ARGS }} -o ${{ inputs.results-type }}
-          cp -r ${{ inputs.results-type }} ../${{ env.RESULTS_PATH }}
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o ${{ inputs.results-type }}
+          cp -r ${{ inputs.results-type }} ../$RESULTS_PATH
           rm -R ${{ inputs.results-type }}
         fi
         cd ..
-      shell: bash
-    - name: Commit Results
-      run: |
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
         git pull
-        git add ${{ env.RESULTS_PATH }}
+        git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
         git push
       shell: bash
