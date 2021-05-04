@@ -44,13 +44,13 @@ runs:
   using: "composite"
   steps:
     - run: |
-        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`
-        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" )
+        RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
+        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         if [ ${{ inputs.results-type }} = "both" ]; then
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o mobile; cp -r mobile ../$RESULTS_PATH; rm -R mobile; } & 
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o desktop; cp -r desktop ../$RESULTS_PATH; rm -R desktop; } &
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } & 
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } &
           wait
         else
           if [ ${{ inputs.results-type }} = "mobile" ]; then
@@ -58,9 +58,8 @@ runs:
           else
             export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           fi
-          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o ${{ inputs.results-type }}
-          cp -r ${{ inputs.results-type }} ../$RESULTS_PATH
-          rm -R ${{ inputs.results-type }}
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
+          cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
         fi
         cd ..
         git config --local user.email ${{ inputs.user-email }}
