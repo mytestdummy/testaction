@@ -22,7 +22,7 @@ inputs:
     description: 'Badges arguments: -b, -l, -o, -r, -s'
     required: true
   results-type:
-    description: 'Results type: mobile, desktop or both'
+    description: 'Results type: mobile, desktop, both, both_p'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile audit'
@@ -48,7 +48,7 @@ runs:
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-        if [ ${{ inputs.results-type }} = "both" ]; then
+        if [ ${${{ inputs.results-type }}:0:4} = "both" ]; then
           { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; }
           { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; }
         else
