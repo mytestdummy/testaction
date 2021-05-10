@@ -58,6 +58,7 @@ runs:
         cd ..
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
+        git pull
         git fetch
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
