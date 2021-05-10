@@ -22,7 +22,7 @@ inputs:
     description: 'Badges arguments: -b, -l, -o, -r, -s'
     required: true
   results-type:
-    description: 'Results type: mobile or desktop'
+    description: 'Results type: mobile, desktop or both'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile audit'
@@ -48,13 +48,19 @@ runs:
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-        if [ ${{ inputs.results-type }} = "mobile" ]; then
-          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+        if [ ${{ inputs.results-type }} = "both" ]; then
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } & 
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } &
+          wait
         else
-          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          if [ ${{ inputs.results-type }} = "mobile" ]; then
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          else
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          fi
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
+          cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
         fi
-        ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
-        cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
         cd ..
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
