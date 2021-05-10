@@ -51,6 +51,7 @@ runs:
         cd temp_lighthouse_badges_nested
         if [ ${RESULTS_TYPE:0:4} = "both" ]; then
           if [ ${RESULTS_TYPE:4} = "_p" ]; then
+            PARALLEL_VAR1="hallo";
             # PARALLEL_VAR1="&";
             # PARALLEL_VAR2="&;wait";
           else
