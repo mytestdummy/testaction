@@ -46,19 +46,27 @@ runs:
     - run: |
         RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
+        RESULTS_TYPE=${{ inputs.results-type }}
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-      if [ ${{{ inputs.results-type }}:0:4} = "both" ]; then
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; }
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; }
+        if [ ${RESULTS_TYPE:0:4} = "both" ]; then
+          if [ ${RESULTS_TYPE:4} = "_p" ]; then
+            PARALLEL_VAR1="&"
+            PARALLEL_VAR2="&;wait"
+          else
+            PARALLEL_VAR1=""
+            PARALLEL_VAR2=""
+          fi
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } $PARALLEL_VAR1
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } $PARALLEL_VAR2
         else
-          if [ ${{ inputs.results-type }} = "mobile" ]; then
+          if [ $RESULTS_TYPE = "mobile" ]; then
             export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
           else
             export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
           fi
-          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
-          cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$RESULTS_TYPE
+          cp -r $RESULTS_PATH/$RESULTS_TYPE ../$RESULTS_PATH
         fi
         cd ..
         git config --local user.email ${{ inputs.user-email }}
