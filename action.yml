@@ -1,6 +1,6 @@
 # Lighthouse-Badger | GitHub Action
 # 
-# Description: Generates, adds & updates manually/automatically Lighthouse badges & reports from one/multiple input URL(s) to a selected target repository
+# Description: Generates, adds & updates manually/automatically Lighthouse badges & reports from one/multiple input URL-group(s) to one/multiple target repo(s)/branch(es)
 # Author: Sitdisch
 # Version: v1.1
 # Source: https://github.com/myactionway/lighthouse-badger-action
@@ -9,7 +9,7 @@
 
 name: 'Lighthouse-Badger'
 author: 'Sitdisch'
-description: "Generates, adds & updates manually/automatically Lighthouse badges & reports from 1,2... input URL(s) to a target repository"
+description: "Generates, adds & updates manually/automatically Lighthouse badges & reports from 1,2... URL(s) to 1,2... repo(s)/branch(es)"
 branding:
   icon: bold
   color: purple
@@ -48,19 +48,13 @@ runs:
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-        if [ ${{ inputs.results-type }} = "both" ]; then
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } & 
-          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } &
-          wait
+        if [ ${{ inputs.results-type }} = "mobile" ]; then
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
         else
-          if [ ${{ inputs.results-type }} = "mobile" ]; then
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-          else
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-          fi
-          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
-          cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
         fi
+        ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/${{ inputs.results-type }}
+        cp -r $RESULTS_PATH/${{ inputs.results-type }} ../$RESULTS_PATH
         cd ..
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
