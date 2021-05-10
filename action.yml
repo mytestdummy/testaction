@@ -49,8 +49,8 @@ runs:
         RESULTS_TYPE=${{ inputs.results-type }}
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-        if [ ${RESULTS_TYPE:0:4} = "both" ]; then
-          if [ ${RESULTS_TYPE:4} = "_p" ]; then
+        if [[ ${RESULTS_TYPE:0:4} = "both" ]]; then
+          if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
             { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } &
             { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } &
             wait
