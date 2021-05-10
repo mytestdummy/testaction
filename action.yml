@@ -22,7 +22,7 @@ inputs:
     description: 'Badges arguments: -b, -l, -o, -r, -s'
     required: true
   results-type:
-    description: 'Results type: mobile, desktop or both'
+    description: 'Results type: mobile or desktop'
     required: true
   mobile-lighthouse-params:
     description: 'Lighthouse parameters mobile audit'
@@ -58,7 +58,7 @@ runs:
         cd ..
         git config --local user.email ${{ inputs.user-email }}
         git config --local user.name ${{ inputs.user-name }}
-        git pull
+        git fetch
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit-message }}"
         git push
