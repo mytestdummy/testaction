@@ -55,7 +55,8 @@ runs:
           #   { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } &
           #   wait
           # else
-          PARALLEL_VAR1="";
+          PARALLEL_VAR1="&";
+          PARALLEL_VAR2="&;wait";
           # if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
           #   PARALLEL_VAR1="&";
           #   PARALLEL_VAR2="&;wait";
@@ -64,7 +65,7 @@ runs:
           #   PARALLEL_VAR2="";
           # fi
           { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } ${{ env.PARALLEL_VAR1 }}
-          # { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } $PARALLEL_VAR2
+          { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } ${{ env.PARALLEL_VAR2 }}
         else
           if [ $RESULTS_TYPE = "mobile" ]; then
             export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
