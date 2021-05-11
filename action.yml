@@ -55,14 +55,14 @@ runs:
             ( export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; ) &
             wait
           else
-          # PARALLEL_VAR1="";
+          PARALLEL_VAR1="";
           # if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
           #   PARALLEL_VAR1="&";
           #   PARALLEL_VAR2="&;wait";
           # else
           #   PARALLEL_VAR1="";
           #   PARALLEL_VAR2="";
-          # fi
+          fi
           # `expr { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile; cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH; } $PARALLEL_VAR1`
           # # { export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"; ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop; cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH; } $PARALLEL_VAR2
         else
