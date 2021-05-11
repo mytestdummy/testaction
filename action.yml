@@ -61,9 +61,8 @@ runs:
             cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH
           }
           if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
-            ( lighthouse_badger_mobile ) &
-            ( lighthouse_badger_desktop ) &
-            wait
+            ( lighthouse_badger_mobile )
+            ( lighthouse_badger_desktop )
           else
             lighthouse_badger_mobile
             lighthouse_badger_desktop
