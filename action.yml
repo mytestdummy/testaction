@@ -49,35 +49,23 @@ runs:
         RESULTS_TYPE=${{ inputs.results-type }}
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
-        # if [[ ${RESULTS_TYPE:0:4} = "both" ]]; then
-        # secrets[matrix.token]
-        if [[ ${{ inputs.results-type[0:4] }} = "both" ]]; then
-          lighthouse_badger_mobile() {
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-            ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/mobile
-            cp -r $RESULTS_PATH/mobile ../$RESULTS_PATH
-          }
-          lighthouse_badger_desktop() {
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-            ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/desktop
-            cp -r $RESULTS_PATH/desktop ../$RESULTS_PATH
-          }
+        lighthouse_badger() {
+          LIGHTHOUSE_PARAMS="$1-lighthouse-params"
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs[$LIGHTHOUSE_PARAMS] }}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
+          cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
+        }
+        if [[ ${RESULTS_TYPE:0:4} = "both" ]]; then
           if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
-            lighthouse_badger_mobile &
-            lighthouse_badger_desktop &
+            lighthouse_badger "mobile" &
+            lighthouse_badger "desktop" &
             wait
           else
-            lighthouse_badger_mobile
-            lighthouse_badger_desktop
+            lighthouse_badger "mobile"
+            lighthouse_badger "desktop"
           fi
         else
-          if [ $RESULTS_TYPE = "mobile" ]; then
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-          else
-            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-          fi
-          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$RESULTS_TYPE
-          cp -r $RESULTS_PATH/$RESULTS_TYPE ../$RESULTS_PATH
+          lighthouse_badger "$RESULTS_TYPE"
         fi
         cd ..
         git config --local user.email ${{ inputs.user-email }}
