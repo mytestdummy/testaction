@@ -48,8 +48,8 @@ runs:
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         RESULTS_TYPE=${{ inputs.results-type }}
         declare -A LIGHTHOUSE_PARAMS
-        LIGHTHOUSE_PARAMS[mobile]="${{ inputs.mobile-lighthouse-params }}""
-        LIGHTHOUSE_PARAMS[desktop]="${{ inputs.desktop-lighthouse-params }}""
+        LIGHTHOUSE_PARAMS[mobile]=${{ inputs.mobile-lighthouse-params }}
+        LIGHTHOUSE_PARAMS[desktop]=${{ inputs.desktop-lighthouse-params }}
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         lighthouse_badger() {
