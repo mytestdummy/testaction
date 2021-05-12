@@ -47,13 +47,13 @@ runs:
         RESULTS_PATH=`expr "${{ inputs.badges-args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
         BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges-args }}" );
         RESULTS_TYPE=${{ inputs.results-type }}
-        declare -A lh_params
-        lh_params[mobile]="${{ inputs.mobile-lighthouse-params }}"
-        lh_params[desktop]="${{ inputs.desktop-lighthouse-params }}"
+        declare -A lighthouse_params
+        lighthouse_params[mobile]="${{ inputs.mobile-lighthouse-params }}"
+        lighthouse_params[desktop]="${{ inputs.desktop-lighthouse-params }}"
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         lighthouse_badger() {
-          # export LIGHTHOUSE_BADGES_PARAMS="${LIGHTHOUSE_PARAMS[$1]}"
+          export LIGHTHOUSE_BADGES_PARAMS="${lighthouse_params[$1]}"
           # if [[ $1 = "mobile" ]]; then
           #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
           # else
