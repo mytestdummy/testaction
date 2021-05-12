@@ -54,11 +54,6 @@ runs:
         cd temp_lighthouse_badges_nested
         lighthouse_badger() {
           export LIGHTHOUSE_BADGES_PARAMS="${lighthouse_params[$1]}"
-          # if [[ $1 = "mobile" ]]; then
-          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
-          # else
-          #   export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
-          # fi
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
           cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
         }
