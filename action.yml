@@ -50,11 +50,13 @@ runs:
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         lighthouse_badger() {
-          LIGHTHOUSE_PARAMS="$1-lighthouse-params"
-          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs[env.LIGHTHOUSE_PARAMS] }}"
+          if [[ $1 = "mobile" ]]; then
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.mobile-lighthouse-params }}"
+          else
+            export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.desktop-lighthouse-params }}"
+          fi
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
           cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
-          echo "${{ inputs[env.LIGHTHOUSE_PARAMS] }}"
         }
         if [[ ${RESULTS_TYPE:0:4} = "both" ]]; then
           if [[ ${RESULTS_TYPE:4} = "_p" ]]; then
