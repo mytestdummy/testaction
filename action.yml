@@ -50,8 +50,8 @@ runs:
         mkdir -p $RESULTS_PATH
         cd temp_lighthouse_badges_nested
         lighthouse_badger() {
-          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.$1-lighthouse-params }}"
-          echo "${{ inputs.$1-lighthouse-params }}"
+          export LIGHTHOUSE_BADGES_PARAMS="${{ inputs.{$1}-lighthouse-params }}"
+          echo "${{ inputs.{$1}-lighthouse-params }}"
           ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
           cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
         }
