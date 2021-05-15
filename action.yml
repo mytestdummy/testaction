@@ -78,15 +78,15 @@ runs:
         git commit -am "${{ inputs.commit_message }}"
         NOPUSH=true
         i=0
-        while $NOPUSH; do
+        while true; do
         { 
-          git push && NOPUSH=false && echo "Yes"
+          git push && echo "Yes" && break
         } || {
           git pull
           git fetch
-          echo "NO"
+          echo "NO $i"
           if [[ $i = 5 ]]; then
-            NOPUSH=false
+            break
           else
             i+=1
           fi
