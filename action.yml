@@ -77,6 +77,7 @@ runs:
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit_message }}"
         NOPUSH=true
+        i=0
         while $NOPUSH; do
         { 
           git push && NOPUSH=false && echo "Yes"
@@ -84,6 +85,11 @@ runs:
           git pull
           git fetch
           echo "NO"
+          if [[ $i = 5 ]]; then
+            NOPUSH=false
+          else
+            i+=1
+          fi
         }
         done
       shell: bash
