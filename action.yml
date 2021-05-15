@@ -77,12 +77,9 @@ runs:
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit_message }}"
         NOPUSH=true
-        while [ $NOPUSH ]
-        do
+        while $NOPUSH; do
         { 
-          git push
-          NOPUSH=false
-          echo "Yes"
+          git push && NOPUSH=false && echo "Yes"
         } || {
           git pull
           git fetch
