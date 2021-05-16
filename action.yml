@@ -41,7 +41,6 @@ inputs:
     required: true
   max_push_attempts:
     description: 'Maximum number of push attempts'
-    default: 5
 
 runs:
   using: "composite"
