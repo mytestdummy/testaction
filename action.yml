@@ -76,7 +76,6 @@ runs:
         git fetch
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit_message }}"
-        NOPUSH=true
         i=0
         while true; do
         { 
