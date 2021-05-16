@@ -47,9 +47,10 @@ runs:
   using: "composite"
   steps:
     - run: |
-        mkdir -p  ${{ inputs.max_push_attempts }}
         RESULTS_PATH=`expr "${{ inputs.badges_args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
-        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges_args }}" );
+        mkdir -p $RESULTS_PATH
+        mkdir -p "Test${{ inputs.max_push_attempts }}"
+        # BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges_args }}" );
         # AUDIT_TYPE=${{ inputs.audit_type }}
         # declare -A lighthouse_params
         # lighthouse_params[mobile]="${{ inputs.mobile_lighthouse_params }}"
