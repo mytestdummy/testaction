@@ -41,7 +41,7 @@ inputs:
     required: true
   max_push_attempts:
     description: 'Maximum number of push attempts'
-    required: true
+    default: 5
 
 runs:
   using: "composite"
@@ -63,13 +63,13 @@ runs:
         if [[ ${AUDIT_TYPE:0:4} = "both" ]]; then
           if [[ ${AUDIT_TYPE:4} = "_p" ]]; then
             lighthouse_badger "mobile" &
-            if [[ 5 = ${{ inputs.max_push_attempts }} ]]; then
-              lighthouse_badger "desktop" &
-            fi
+            lighthouse_badger "desktop" &
             wait
           else
             lighthouse_badger "mobile"
-            lighthouse_badger "desktop"
+            if [[ 5 = ${{ inputs.max_push_attempts }} ]]; then
+              lighthouse_badger "desktop"
+            fi
           fi
         else
           lighthouse_badger "$AUDIT_TYPE"
