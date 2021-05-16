@@ -39,9 +39,9 @@ inputs:
   commit_message:
     description: 'Commit message'
     required: true
-  max-push-attempts:
+  max_push_attempts:
     description: 'Maximum number of push attempts'
-    default: 5
+    required: true
 
 runs:
   using: "composite"
@@ -63,7 +63,7 @@ runs:
         if [[ ${AUDIT_TYPE:0:4} = "both" ]]; then
           if [[ ${AUDIT_TYPE:4} = "_p" ]]; then
             lighthouse_badger "mobile" &
-            if [[ 5 = ${{ inputs.max-push-attempts }} ]]; then
+            if [[ 5 = ${{ inputs.max_push_attempts }} ]]; then
               lighthouse_badger "desktop" &
             fi
             wait
@@ -89,7 +89,7 @@ runs:
           git pull
           git fetch
           echo "NO $i"
-          if [[ $i = ${{ inputs.max-push-attempts }} ]]; then
+          if [[ $i = ${{ inputs.max_push_attempts }} ]]; then
             break
           else
             i=$(( $i + 1 ))
