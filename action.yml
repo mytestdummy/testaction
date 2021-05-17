@@ -84,15 +84,13 @@ runs:
         { 
           git push && break
         } || {
-          echo "$i push attempt failed"
+          i=$(( $i + 1 ))
+          echo $i"th push attempt failed"
+          if [ $i = ${{ inputs.max_push_attempts }} ]; then
+            break
+          fi
           git pull
           git fetch
-          if [ $i = ${{ inputs.max_push_attempts }} ]; then
-            echo "All ${{ inputs.max_push_attempts }} push attempts failed"
-            break
-          else
-            i=$(( $i + 1 ))
-          fi
         }
         done
       shell: bash
