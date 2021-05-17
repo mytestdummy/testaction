@@ -33,12 +33,13 @@ inputs:
   user_name:
     description: 'User who should commit'
     required: true
+    default: 'github-actions[bot]'
   user_email:
     description: 'User e-mail address'
     required: true
   commit_message:
     description: 'Commit message'
-    required: true
+    default: 'Lighthouse-Badger[bot]: Results Added'
   max_push_attempts:
     description: 'Maximum number of push attempts'
     default: 5
