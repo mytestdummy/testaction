@@ -47,64 +47,52 @@ runs:
   using: "composite"
   steps:
     - run: |
+        RESULTS_PATH=`expr "${{ inputs.badges_args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
+        BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges_args }}" );
+        AUDIT_TYPE=${{ inputs.audit_type }}
+        declare -A lighthouse_params
+        lighthouse_params[mobile]="${{ inputs.mobile_lighthouse_params }}"
+        lighthouse_params[desktop]="${{ inputs.desktop_lighthouse_params }}"
+        mkdir -p $RESULTS_PATH
+        cd temp_lighthouse_badges_nested
+        lighthouse_badger() {
+          export LIGHTHOUSE_BADGES_PARAMS="${lighthouse_params[$1]}"
+          ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
+          cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
+        }
+        if [[ ${AUDIT_TYPE:0:4} = "both" ]]; then
+          if [[ ${AUDIT_TYPE:4} = "_p" ]]; then
+            lighthouse_badger "mobile" &
+            lighthouse_badger "desktop" &
+            wait
+          else
+            lighthouse_badger "mobile"
+            lighthouse_badger "desktop"
+          fi
+        else
+          lighthouse_badger "$AUDIT_TYPE"
+        fi
+        cd ..
+        git config --local user.email ${{ inputs.user_email }}
+        git config --local user.name ${{ inputs.user_name }}
+        git pull
+        git fetch
+        git add $RESULTS_PATH
+        git commit -am "${{ inputs.commit_message }}"
         i=0
-        echo ${{ inputs.max_push_attempts }}
         while true; do
-        {
+        { 
+          git push && break
+        } || {
+          echo "$i push attempt failed"
+          git pull
+          git fetch
           if [ $i = ${{ inputs.max_push_attempts }} ]; then
-            echo "Yes $i"
+            echo "All ${{ inputs.max_push_attempts }} push attempts failed"
             break
           else
-            echo "NO $i"
             i=$(( $i + 1 ))
           fi
         }
         done
-        # RESULTS_PATH=`expr "${{ inputs.badges_args }}" : ".* --\?ou\?t\?p\?u\?t\?-\?p\?a\?t\?h\? \([^ ]*\).*"`;
-        # BADGES_ARGS=$(sed -e "s/ \(\(--output-path\)\|\(-o\)\) \S*//g" <<< "${{ inputs.badges_args }}" );
-        # AUDIT_TYPE=${{ inputs.audit_type }}
-        # declare -A lighthouse_params
-        # lighthouse_params[mobile]="${{ inputs.mobile_lighthouse_params }}"
-        # lighthouse_params[desktop]="${{ inputs.desktop_lighthouse_params }}"
-        # mkdir -p $RESULTS_PATH
-        # cd temp_lighthouse_badges_nested
-        # lighthouse_badger() {
-        #   export LIGHTHOUSE_BADGES_PARAMS="${lighthouse_params[$1]}"
-        #   ./src/index.js -u ${{ inputs.urls }} $BADGES_ARGS -o $RESULTS_PATH/$1
-        #   cp -r $RESULTS_PATH/$1 ../$RESULTS_PATH
-        # }
-        # if [[ ${AUDIT_TYPE:0:4} = "both" ]]; then
-        #   if [[ ${AUDIT_TYPE:4} = "_p" ]]; then
-        #     lighthouse_badger "mobile" &
-        #     lighthouse_badger "desktop" &
-        #     wait
-        #   else
-        #     lighthouse_badger "mobile"
-        #     lighthouse_badger "desktop"
-        #   fi
-        # else
-        #   lighthouse_badger "$AUDIT_TYPE"
-        # fi
-        # cd ..
-        # git config --local user.email ${{ inputs.user_email }}
-        # git config --local user.name ${{ inputs.user_name }}
-        # git pull
-        # git fetch
-        # git add $RESULTS_PATH
-        # git commit -am "${{ inputs.commit_message }}"
-        # i=0
-        # while true; do
-        # { 
-        #   git push && echo "Yes" && break
-        # } || {
-        #   git pull
-        #   git fetch
-        #   echo "NO $i"
-        #   if [ $i = ${{ inputs.max_push_attempts }} ]; then
-        #     break
-        #   else
-        #     i=$(( $i + 1 ))
-        #   fi
-        # }
-        # done
       shell: bash
