@@ -75,6 +75,7 @@ runs:
         cd ..
         git config --local user.email ${{ inputs.user_email }}
         git config --local user.name ${{ inputs.user_name }}
+        git config --local pull.rebase false
         git pull origin ${{ env.BRANCH }}
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit_message }}"
