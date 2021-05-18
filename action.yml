@@ -81,14 +81,14 @@ runs:
         i=0
         while true; do
         { 
-          git pull origin ${{ env.BRANCH }} && break
+          git push && break
         } || {
           i=$(( $i + 1 ))
           echo $i"th push attempt failed"
           if [ $i = ${{ inputs.max_push_attempts }} ]; then
             break
           fi
-          git pull
+          git pull origin ${{ env.BRANCH }}
         }
         done
       shell: bash
