@@ -75,7 +75,8 @@ runs:
         cd ..
         git config --local user.email ${{ inputs.user_email }}
         git config --local user.name ${{ inputs.user_name }}
-        echo "HOHO ${{ github.base_ref }}"
+        echo "HOHO1 "${{ github.base_ref }}
+        echo "HOHO2 ${{ env.BRANCH }}"${{ env.BRANCH }}
         git pull
         # git pull origin ${{ github.base_ref }}
         git add $RESULTS_PATH
