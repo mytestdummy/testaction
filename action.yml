@@ -75,16 +75,13 @@ runs:
         cd ..
         git config --local user.email ${{ inputs.user_email }}
         git config --local user.name ${{ inputs.user_name }}
-        echo "HOHO1 "${{ github.base_ref }}
-        echo "HOHO2 ${{ env.BRANCH }}"${{ env.BRANCH }}
-        git pull
-        # git pull origin ${{ github.base_ref }}
+        git pull origin ${{ env.BRANCH }}
         git add $RESULTS_PATH
         git commit -am "${{ inputs.commit_message }}"
         i=0
         while true; do
         { 
-          git pull origin ${{ github.base_ref }} && break
+          git pull origin ${{ env.BRANCH }} && break
         } || {
           i=$(( $i + 1 ))
           echo $i"th push attempt failed"
