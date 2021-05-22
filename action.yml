@@ -1,6 +1,6 @@
 # Branch-Pruner | GitHub Action
 # 
-# Description: Truncates a branch's old commit history
+# Description: Truncates the old commit history of one/multiple selected target branch(es)
 # Author: Sitdisch
 # Version: v2.0
 # Source: https://github.com/myactionway/branch-pruner-action
